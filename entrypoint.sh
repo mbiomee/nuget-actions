@@ -87,7 +87,8 @@ dotnet_push_pack_cmd="dotnet nuget push $INPUT_PROJECTNAME/bin/Release/*.nupkg  
 # Execute shell commands
 #-----------------------------------
 echo "Shell commands"
-
+sh -c "pwd"
+sh -c "ls"
 #Run Sonarscanner .NET Core "begin" command
 echo "sonar_begin_cmd: $sonar_begin_cmd"
 sh -c "$sonar_begin_cmd"
