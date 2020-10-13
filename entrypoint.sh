@@ -7,10 +7,6 @@ if [ -z "$INPUT_SONARPROJECTKEY" ]; then
     echo "Input parameter sonarProjectKey is required"
     exit 1
 fi
-if [ -z "$INPUT_SONARPROJECTNAME" ]; then
-    echo "Input parameter sonarProjectName is required"
-    exit 1
-fi
 if [ -z "$SONAR_TOKEN" ]; then
     echo "Environment parameter SONAR_TOKEN is required"
     exit 1
@@ -18,8 +14,9 @@ fi
 
 # List Environment variables that's set by Github Action input parameters (defined by user)
 echo "Github Action input parameters"
+echo "INPUT_NAME: $INPUT_NAME"
+echo "INPUT_PROJECTNAME: $INPUT_PROJECTNAME"
 echo "INPUT_SONARPROJECTKEY: $INPUT_SONARPROJECTKEY"
-echo "INPUT_SONARPROJECTNAME: $INPUT_SONARPROJECTNAME"
 echo "INPUT_SONARORGANIZATION: $INPUT_SONARORGANIZATION"
 echo "INPUT_DOTNETBUILDARGUMENTS: $INPUT_DOTNETBUILDARGUMENTS"
 echo "INPUT_DOTNETTESTARGUMENTS: $INPUT_DOTNETTESTARGUMENTS"
@@ -31,10 +28,8 @@ echo "INPUT_SONARHOSTNAME: $INPUT_SONARHOSTNAME"
 #-----------------------------------
 # Build Sonarscanner begin command
 #-----------------------------------
-sonar_begin_cmd="/dotnet-sonarscanner begin /k:\"${INPUT_SONARPROJECTKEY}\" /n:\"${INPUT_SONARPROJECTNAME}\" /d:sonar.login=\"${SONAR_TOKEN}\" /d:sonar.host.url=\"${INPUT_SONARHOSTNAME}\""
-if [ -n "$INPUT_SONARORGANIZATION" ]; then
-    sonar_begin_cmd="$sonar_begin_cmd /o:\"${INPUT_SONARORGANIZATION}\""
-fi
+sonar_begin_cmd="/dotnet-sonarscanner begin /o:\"${INPUT_SONARORGANIZATION}\" /k:\"${INPUT_SONARPROJECTKEY}\"  /d:sonar.login=\"${SONAR_TOKEN}\" /d:sonar.host.url=\"${INPUT_SONARHOSTNAME}\""
+
 if [ -n "$INPUT_SONARBEGINARGUMENTS" ]; then
     sonar_begin_cmd="$sonar_begin_cmd $INPUT_SONARBEGINARGUMENTS"
 fi
@@ -71,6 +66,24 @@ if [ -n "$INPUT_DOTNETTESTARGUMENTS" ]; then
 fi
 
 #-----------------------------------
+# Build dotnet package command
+#-----------------------------------
+dotnet_test_cmd="dotnet package"
+
+#-----------------------------------
+# Build dotnet package command
+#-----------------------------------
+dotnet_pack_cmd="dotnet pack --configuration Release $INPUT_PROJECTNAME"
+
+#-----------------------------------
+# Build push package command
+#-----------------------------------
+dotnet_push_pack_cmd="dotnet nuget push $INPUT_PROJECTNAME/bin/Release/*.nupkg  -Source \"$INPUT_NAME\"" 
+
+
+
+
+#-----------------------------------
 # Execute shell commands
 #-----------------------------------
 echo "Shell commands"
@@ -92,3 +105,8 @@ fi
 #Run Sonarscanner .NET Core "end" command
 echo "sonar_end_cmd: $sonar_end_cmd"
 sh -c "$sonar_end_cmd"
+
+#Run package command
+echo "dotnet_pack_cmd: $dotnet_pack_cmd"
+sh -c "$dotnet_pack_cmd"
+

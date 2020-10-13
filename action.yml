@@ -3,14 +3,17 @@ description: "Nuget pakage with SonarScanner"
 author: "Mostafa Biomee"
 
 inputs:
+  sourceName:
+    description: "source you chosen for NuGet packages store of given organization / account"
+    required: true
+  projectName:
+    description: "Nuget Project Name"
+    required: true
   sonarOrganization:
     description: "Organization name in SonarCloud. For hosted SonarQube, skip this setting."
     required: false
   sonarProjectKey:
     description: "The key of the SonarQube project"
-    required: true
-  sonarProjectName:
-    description: "The name of the SonarQube project"
     required: true
   sonarHostname:
     description: "The SonarQube server URL. For SonarCloud, skip this setting."
