@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag highbyte/sonarscan-dotnet:$(date +%s)
+      run: docker build . --file Dockerfile --tag mbiomee/nuget-actions:$(date +%s)
