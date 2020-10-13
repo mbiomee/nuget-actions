@@ -32,4 +32,6 @@ inputs:
     description: "Optional extra command arguments the the SonarScanner 'begin' command"
     required: false
 
-  
+runs:
+  using: "docker"
+  image: "Dockerfile"
