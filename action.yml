@@ -3,7 +3,7 @@ description: "Nuget pakage with SonarScanner"
 author: "Mostafa Biomee"
 
 inputs:
-  sourceName:
+  Name:
     description: "source you chosen for NuGet packages store of given organization / account"
     required: true
   projectName:
